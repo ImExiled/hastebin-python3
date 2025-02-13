@@ -1,0 +1,25 @@
+# pyHaste Project
+
+**HasteServer rewritten in Python3, down to the bare minimum. Reliable, self-controlled, self-hosted.**
+
+## What is this?
+
+This application exists to be an up-to-date replacement for HasteServer, and the prior hastebin. It also serves to be better then
+whatever the hell the current owners did to hastebin.
+
+Its a complete rewrite in Python3 using Flask, it contains only the bare minimum to be a proper hastebin.
+
+## How does it work?
+Just like prior hastebin did, with improvements coming.
+The only major difference is that it will not autodetect what language you are pasting in. You will have to append a file extension to get syntax highlighting.
+
+For example, you have a haste located at /?f=testhaste
+
+Lets say that testhaste is written in Python.
+
+To get Python syntax highlighting, simply append `.py`.
+/?f=testhaste.py
+
+## How about an API?
+Presently, there is no api. I may add this in the future.
+
