@@ -2,7 +2,7 @@ from urllib.parse import urlparse
 from colorama import Fore, Back, Style
 import logging
 import datetime as date
-from flask import Flask, jsonify, send_file, url_for, render_template, send_from_directory, request, redirect
+from flask import Flask, jsonify, send_file, render_template, request, make_response
 from os import path
 import pathlib
 import random
@@ -212,11 +212,26 @@ def index():
 @app.route('/api/gethaste', methods=["GET"])
 def getpaste():
     fileRequest = request.values.get("haste")
-    if os.path.isfile(f"./files/{fileRequest}.haste"):
-        with open(f'./files/{fileRequest}.haste', 'r') as f:
-            return send_file(f"./files/{fileRequest}.haste", as_attachment=False)
+    filepath = os.path.join("files", f"{fileRequest}.haste") # Construct path correctly
+    return "not implemented"
+    if os.path.exists(filepath): # Use os.path.exists
+        try:
+            with open(filepath, 'rb') as f:  # **Consistent: Always binary mode**
+                file_content_bytes = f.read()
+                file_content_string = file_content_bytes.decode('utf-8', errors='replace')
+                file_content_bytes = file_content_string.encode('utf-8')
+
+
+            response = make_response(file_content_bytes)
+            response.headers['Content-Type'] = 'text/plain; charset=utf-8'
+            return response
+
+        except Exception as e:
+            logger.error(f"Error reading or serving file: {e}")
+            return "Error serving file", 500  # More informative error
+
     else:
-        return "{'response': 'haste not found', 'status':'failure'}"
+        return jsonify({'response': 'haste not found', 'status':'failure'}), 404 
     
 @app.route('/api/haste', methods=["POST"])
 def putpaste():
