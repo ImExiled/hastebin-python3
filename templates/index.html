@@ -1,0 +1,872 @@
+<html>
+    <head>
+        <title>pyHaste</title>
+        <meta charset="utf-8">
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link href="https://fonts.googleapis.com/css2?family=Material+Icons&amp;family=Fira+Code&amp;family=Roboto:wght@400;500&amp;display=swap" rel="stylesheet">
+        <link rel="canonical" href="https://hastebin.skyra.pw">
+		<meta name="url" content="https://hastebin.skyra.pw">
+		<meta name="identifier-URL" content="https://hastebin.skyra.pw">
+		<meta name="shortlink" content="https://hastebin.skyra.pw">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="keywords" content="haste, bin, skyra, hastebin, paste, pastebin">
+		<meta name="subject" content="Hastebin for developers, by developers.">
+		<meta name="robots" content="archive,follow,imageindex,index,odp,snippet,translate">
+		<meta name="googlebot" content="index,follow">
+		<meta name="author" content="Skyra Project, contact@skyra.pw">
+		<meta name="owner" content="Skyra Project, contact@skyra.pw">
+		<meta name="designer" content="Skyra Project, contact@skyra.pw">
+		<meta name="reply-to" content="contact@skyra.pw">
+		<meta name="target" content="all">
+		<meta name="audience" content="all">
+		<meta name="coverage" content="Worldwide">
+		<meta name="distribution" content="Global">
+		<meta name="rating" content="safe for kids">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="HandheldFriendly" content="True">
+		<meta name="apple-mobile-web-app-title" content="Hastebin">
+		<meta name="application-name" content="Hastebin">
+		<meta name="msapplication-TileColor" content="#282C34">
+		<meta name="msapplication-TileImage" content="/seo/mstile-144x144.png">
+		<meta name="msapplication-config" content="/seo/browserconfig.xml">
+		<meta name="revisit-after" content="7 days">
+		<meta property="og:email" content="contact@skyra.pw">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta http-equiv="Expires" content="1y">
+		<meta http-equiv="Pragma" content="1y">
+		<meta http-equiv="Cache-Control" content="1y">
+		<meta http-equiv="Page-Enter" content="RevealTrans(Duration=2.0,Transition=2)">
+		<meta http-equiv="Page-Exit" content="RevealTrans(Duration=3.0,Transition=12)">
+        <script type="module" crossorigin="" src="/static/prism.js"></script>
+        <link rel="stylesheet" href="/static/prism.css" />
+        <style>
+[data-pnotify].material-elem,[data-pnotify].material-elem.pnotify-mode-light {
+    --notice-background-color: #fff59d;
+    --notice-text-color: #000;
+    --info-background-color: #9dfff5;
+    --info-text-color: #000;
+    --success-background-color: #a7ff9d;
+    --success-text-color: #000;
+    --error-background-color: #ffc49d;
+    --error-text-color: #000;
+    --primary-button-text-color: #3f51b5;
+    --primary-button-text-focus-color: #303f9f;
+    --input-focus-underline-color: #3f51b5;
+    border-radius: 0;
+    font-size: 14px
+}
+
+@media (prefers-color-scheme: dark) {
+    [data-pnotify].material-elem.pnotify-mode-no-preference {
+        --notice-background-color:#ff8f00;
+        --notice-text-color: #fff;
+        --info-background-color: #006eff;
+        --info-text-color: #fff;
+        --success-background-color: #00c000;
+        --success-text-color: #fff;
+        --error-background-color: #f10;
+        --error-text-color: #fff;
+        --primary-button-text-color: #e1f5fe;
+        --primary-button-text-focus-color: #e0f7fa;
+        --input-focus-underline-color: #e1f5fe
+    }
+}
+
+[data-pnotify].material-elem.pnotify-mode-dark {
+    --notice-background-color: #ff8f00;
+    --notice-text-color: #fff;
+    --info-background-color: #006eff;
+    --info-text-color: #fff;
+    --success-background-color: #00c000;
+    --success-text-color: #fff;
+    --error-background-color: #f10;
+    --error-text-color: #fff;
+    --primary-button-text-color: #e1f5fe;
+    --primary-button-text-focus-color: #e0f7fa;
+    --input-focus-underline-color: #e1f5fe
+}
+
+[data-pnotify] .material-notice {
+    --material-background-color: var(--notice-background-color);
+    --material-text-color: var(--notice-text-color)
+}
+
+[data-pnotify] .material-info {
+    --material-background-color: var(--info-background-color);
+    --material-text-color: var(--info-text-color)
+}
+
+[data-pnotify] .material-success {
+    --material-background-color: var(--success-background-color);
+    --material-text-color: var(--success-text-color)
+}
+
+[data-pnotify] .material-error {
+    --material-background-color: var(--error-background-color);
+    --material-text-color: var(--error-text-color)
+}
+
+[data-pnotify].material-elem.pnotify-shadow {
+    box-shadow: 0 6px 24px #0003
+}
+
+[data-pnotify] .material-container {
+    padding: 24px;
+    background-color: var(--material-background-color);
+    border: none;
+    color: var(--material-text-color)
+}
+
+[data-pnotify] .material-title {
+    font-family: Roboto,sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    letter-spacing: .15px;
+    margin-bottom: 20px;
+    line-height: 24px
+}
+
+[data-pnotify] .material-title:last-child {
+    margin-bottom: 0
+}
+
+[data-pnotify] .material-text {
+    font-family: Roboto,sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    letter-spacing: .5px;
+    line-height: 24px
+}
+
+[data-pnotify].pnotify-with-icon .material-content {
+    margin-left: 32px
+}
+
+[dir=rtl] [data-pnotify].pnotify-with-icon .material-content {
+    margin-right: 32px;
+    margin-left: 0
+}
+
+[data-pnotify] .material-closer,[data-pnotify] .material-icon,[data-pnotify] .material-icon-closer:after,[data-pnotify] .material-icon-sticker:after,[data-pnotify] .material-icon>span:after,[data-pnotify] .material-sticker {
+    font-family: Material Icons;
+    height: 20px;
+    width: 20px;
+    font-size: 20px;
+    line-height: 24px;
+    position: relative
+}
+
+[data-pnotify] .material-action-bar {
+    margin-top: 20px;
+    margin-right: -16px;
+    margin-bottom: -16px
+}
+
+[dir=rtl] [data-pnotify] .material-action-bar {
+    margin-left: -16px;
+    margin-right: 0
+}
+
+[data-pnotify] .material-icon-notice:after {
+    content: "priority_high"
+}
+
+[data-pnotify] .material-icon-info:after {
+    content: "info"
+}
+
+[data-pnotify] .material-icon-success:after {
+    content: "done"
+}
+
+[data-pnotify] .material-icon-error:after {
+    content: "error"
+}
+
+[data-pnotify] .material-icon-closer:after {
+    content: "close"
+}
+
+[data-pnotify] .material-icon-unstuck:after {
+    content: "pause"
+}
+
+[data-pnotify] .material-icon-stuck:after {
+    content: "play_arrow"
+}
+
+[data-pnotify] .material-input {
+    display: block;
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 15px 0 8px;
+    background-color: transparent;
+    color: inherit;
+    border-radius: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom-style: solid;
+    border-bottom-color: inherit;
+    border-bottom-width: 1px
+}
+
+[data-pnotify] .material-input:focus {
+    outline: none;
+    border-bottom-color: var(--input-focus-underline-color);
+    border-bottom-width: 2px
+}
+
+[data-pnotify] .material-btn {
+    position: relative;
+    padding: 0 16px;
+    overflow: hidden;
+    border-width: 0;
+    outline: none;
+    border-radius: 2px;
+    background-color: transparent;
+    color: inherit;
+    transition: background-color .3s;
+    font-family: Roboto,sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    letter-spacing: 1.25px;
+    text-transform: uppercase;
+    height: 36px;
+    margin: 6px;
+    min-width: 64px
+}
+
+[data-pnotify] .material-btn.material-btn-primary {
+    color: var(--primary-button-text-color)
+}
+
+[data-pnotify] .material-btn:focus,[data-pnotify] .material-btn:hover {
+    background-color: #0000001f;
+    color: inherit
+}
+
+[data-pnotify] .material-btn.material-btn-primary:focus,[data-pnotify] .material-btn.material-btn-primary:hover {
+    color: var(--primary-button-text-focus-color)
+}
+
+[data-pnotify] .material-btn:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: 0;
+    padding-top: 0;
+    border-radius: 100%;
+    background-color: #9996;
+    transform: translate(-50%,-50%)
+}
+
+[data-pnotify] .material-btn:active:before {
+    width: 120%;
+    padding-top: 120%;
+    transition: width .2s ease-out,padding-top .2s ease-out
+}
+
+[data-pnotify] .material-countdown {
+    background-color: var(--material-background-color)
+}
+
+[data-pnotify] .material-countdown-bar {
+    background-color: var(--material-text-color)
+}
+
+[data-pnotify] .material-paginate {
+    display: inline-flex;
+    flex-direction: column
+}
+
+[data-pnotify] .material-paginate-buttons {
+    margin-right: 6px
+}
+
+[data-pnotify] .material-paginate-btn {
+    margin: 0 0 0 6px;
+    border: 0;
+    padding: 0
+}
+
+[data-pnotify] .material-paginate-btn,[data-pnotify] .material-paginate-btn:after {
+    display: inline-block;
+    font-family: Material Icons;
+    height: 20px;
+    width: 20px;
+    font-size: 20px;
+    line-height: 24px;
+    position: relative
+}
+
+[data-pnotify] .material-paginate-btn:disabled:after,[data-pnotify] .material-paginate-btn[aria-disabled=true]:after {
+    opacity: .5
+}
+
+[data-pnotify] .material-paginate-previous:after {
+    content: "arrow_back"
+}
+
+[data-pnotify] .material-paginate-next:after {
+    content: "arrow_forward"
+}
+
+[data-pnotify] .material-paginate-count {
+    font-family: Roboto,sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    letter-spacing: .25px
+}
+
+body>.pnotify.pnotify-positioned {
+    position: fixed;
+    z-index: 100040
+}
+
+body>.pnotify.pnotify-modal {
+    z-index: 100042
+}
+
+.pnotify {
+    height: auto;
+    display: none;
+    transition: opacity .1s linear;
+    opacity: 0
+}
+
+.pnotify.pnotify-positioned {
+    position: absolute;
+    z-index: 1
+}
+
+.pnotify.pnotify-modal {
+    z-index: 3
+}
+
+.pnotify.pnotify-in {
+    display: block;
+    opacity: 1
+}
+
+.pnotify.pnotify-initial {
+    display: block
+}
+
+.pnotify-hidden {
+    visibility: hidden
+}
+
+.pnotify.pnotify-move {
+    transition: left .4s ease,top .4s ease,right .4s ease,bottom .4s ease
+}
+
+.pnotify.pnotify-fade-slow {
+    transition: opacity .4s linear;
+    opacity: 0
+}
+
+.pnotify.pnotify-fade-slow.pnotify.pnotify-move {
+    transition: opacity .4s linear,left .4s ease,top .4s ease,right .4s ease,bottom .4s ease
+}
+
+.pnotify.pnotify-fade-normal {
+    transition: opacity .25s linear;
+    opacity: 0
+}
+
+.pnotify.pnotify-fade-normal.pnotify.pnotify-move {
+    transition: opacity .25s linear,left .4s ease,top .4s ease,right .4s ease,bottom .4s ease
+}
+
+.pnotify.pnotify-fade-fast {
+    transition: opacity .1s linear;
+    opacity: 0
+}
+
+.pnotify.pnotify-fade-fast.pnotify.pnotify-move {
+    transition: opacity .1s linear,left .4s ease,top .4s ease,right .4s ease,bottom .4s ease
+}
+
+.pnotify.pnotify-masking {
+    display: block;
+    -webkit-mask-image: linear-gradient(180deg,rgba(0,0,0,.8),transparent 30px,transparent);
+    mask-image: linear-gradient(180deg,rgba(0,0,0,.8),transparent 30px,transparent)
+}
+
+.pnotify.pnotify-masking.pnotify-stack-up {
+    -webkit-mask-image: linear-gradient(0deg,rgba(0,0,0,.8),transparent 30px,transparent);
+    mask-image: linear-gradient(0deg,rgba(0,0,0,.8),transparent 30px,transparent)
+}
+
+.pnotify.pnotify-masking.pnotify-stack-left {
+    -webkit-mask-image: linear-gradient(270deg,rgba(0,0,0,.8),transparent 30px,transparent);
+    mask-image: linear-gradient(270deg,rgba(0,0,0,.8),transparent 30px,transparent)
+}
+
+.pnotify.pnotify-masking.pnotify-stack-right {
+    -webkit-mask-image: linear-gradient(90deg,rgba(0,0,0,.8),transparent 30px,transparent);
+    mask-image: linear-gradient(90deg,rgba(0,0,0,.8),transparent 30px,transparent)
+}
+
+.pnotify.pnotify-fade-in,.pnotify.pnotify-masking-in {
+    opacity: 1
+}
+
+.pnotify .pnotify-shadow {
+    box-shadow: 0 6px 28px #0000001a
+}
+
+.pnotify-container {
+    position: relative;
+    background-position: 0 0;
+    padding: .8em;
+    height: 100%;
+    margin: 0
+}
+
+.pnotify-container:after {
+    content: " ";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    clear: both
+}
+
+.pnotify-closer,.pnotify-sticker {
+    float: right;
+    margin-left: .5em;
+    cursor: pointer
+}
+
+[dir=rtl] .pnotify-closer,[dir=rtl] .pnotify-sticker {
+    float: left;
+    margin-right: .5em;
+    margin-left: 0
+}
+
+.pnotify-title {
+    display: block;
+    white-space: pre-line;
+    margin-bottom: .4em;
+    margin-top: 0
+}
+
+.pnotify-text-with-max-height {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: .03em
+}
+
+.pnotify.pnotify-with-icon .pnotify-content {
+    margin-left: 24px
+}
+
+[dir=rtl] .pnotify.pnotify-with-icon .pnotify-content {
+    margin-right: 24px;
+    margin-left: 0
+}
+
+.pnotify-pre-line {
+    white-space: pre-line
+}
+
+.pnotify-icon,.pnotify-icon span {
+    display: block;
+    float: left
+}
+
+[dir=rtl] .pnotify-icon,[dir=rtl] .pnotify-icon span {
+    float: right
+}
+
+.pnotify-modal-overlay {
+    background-color: #0009;
+    top: 0;
+    left: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    transition: opacity .25s linear;
+    opacity: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end
+}
+
+.pnotify-modal-overlay-up {
+    align-items: flex-start
+}
+
+.pnotify-modal-overlay-left {
+    justify-content: flex-start;
+    align-items: center
+}
+
+.pnotify-modal-overlay-right {
+    justify-content: flex-end;
+    align-items: center
+}
+
+.pnotify-modal-overlay.pnotify-modal-overlay-in {
+    opacity: 1
+}
+
+.pnotify-modal-overlay-closes:after {
+    content: "×";
+    font-family: Arial;
+    font-size: 3rem;
+    color: #fff;
+    text-shadow: 0 0 .4rem #fff
+}
+
+body>.pnotify-modal-overlay {
+    position: fixed;
+    z-index: 100041
+}
+
+pre code.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em
+}
+
+code.hljs {
+    padding: 3px 5px
+}
+
+.hljs {
+    color: #abb2bf;
+    background: #282c34
+}
+
+.hljs-keyword,.hljs-operator,.hljs-pattern-match {
+    color: #f92672
+}
+
+.hljs-pattern-match .hljs-constructor,.hljs-function {
+    color: #61aeee
+}
+
+.hljs-function .hljs-params {
+    color: #a6e22e
+}
+
+.hljs-function .hljs-params .hljs-typing {
+    color: #fd971f
+}
+
+.hljs-module-access .hljs-module {
+    color: #7e57c2
+}
+
+.hljs-constructor {
+    color: #e2b93d
+}
+
+.hljs-constructor .hljs-string {
+    color: #9ccc65
+}
+
+.hljs-comment,.hljs-quote {
+    color: #b18eb1;
+    font-style: italic
+}
+
+.hljs-doctag,.hljs-formula {
+    color: #c678dd
+}
+
+.hljs-section,.hljs-name,.hljs-selector-tag,.hljs-deletion,.hljs-subst {
+    color: #e06c75
+}
+
+.hljs-literal {
+    color: #56b6c2
+}
+
+.hljs-string,.hljs-regexp,.hljs-addition,.hljs-attribute,.hljs-meta .hljs-string {
+    color: #98c379
+}
+
+.hljs-built_in,.hljs-title.class_,.hljs-class .hljs-title {
+    color: #e6c07b
+}
+
+.hljs-attr,.hljs-variable,.hljs-template-variable,.hljs-type,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo,.hljs-number {
+    color: #d19a66
+}
+
+.hljs-symbol,.hljs-bullet,.hljs-link,.hljs-meta,.hljs-selector-id,.hljs-title {
+    color: #61aeee
+}
+
+.hljs-emphasis {
+    font-style: italic
+}
+
+.hljs-strong {
+    font-weight: 700
+}
+
+.hljs-link {
+    text-decoration: underline
+}
+
+:root {
+    --fonts: "Fira Code", Consolas, Andale Mono WT, Andale Mono, Lucida Console, Lucida Sans Typewriter, DejaVu Sans Mono, Bitstream Vera Sans Mono, Liberation Mono, Nimbus Mono L, Monaco, Courier New, Courier, monospace, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    --dark-black: #141512
+}
+
+html {
+    height: 100%
+}
+
+body {
+    background: #282c34;
+    padding: 20px 50px;
+    margin: 0;
+    height: 100%;
+    box-sizing: border-box
+}
+
+textarea {
+    background: transparent;
+    border: 0px;
+    color: #fff;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: var(--fonts);
+    outline: none;
+    resize: none;
+    font-size: 13px;
+    margin-top: 0;
+    margin-bottom: 0
+}
+
+#linenos {
+    color: #7d7d7d;
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 30px;
+    font-size: 15px;
+    font-family: var(--fonts);
+    text-align: right;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none
+}
+
+#box {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    border: 0px;
+    outline: none;
+    font-size: 13px;
+    overflow: inherit
+}
+
+#box code,pre {
+    padding: 0;
+    background: transparent!important;
+    font-size: 15px;
+    font-family: var(--fonts)
+}
+
+#key {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 1000;
+    width: 200px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none
+}
+
+#box1 {
+    padding: 5px;
+    text-align: center;
+    background: var(--dark-black)
+}
+
+#box2 {
+    background: var(--dark-black);
+    font-size: 0px;
+    padding: 0 5px;
+    display: flex;
+    align-items: center;
+    align-content: center;
+    justify-content: center
+}
+
+#box1 a.logo,#box1 a.logo:visited {
+    display: inline-block;
+    background: url(/logo.png);
+    width: 126px;
+    height: 42px
+}
+
+#box1 a.logo:hover {
+    background-position: 0 bottom
+}
+
+#box2 .function {
+    background: url(/static/function-icons.png);
+    width: 32px;
+    height: 37px;
+    display: inline-block;
+    position: relative
+}
+
+#box2 .link embed {
+    vertical-align: bottom
+}
+
+#box2 .function.enabled:hover {
+    cursor: hand;
+    cursor: pointer
+}
+
+#box3 {
+    background: var(--dark-black);
+    font-family: Helvetica,sans-serif;
+    font-size: 12px;
+    line-height: 14px;
+    padding: 10px 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none
+}
+
+#box3 .label {
+    color: #fff;
+    font-weight: 700
+}
+
+#box3 .shortcut {
+    color: #c4dce3;
+    font-weight: 400
+}
+
+#box2 .function.save {
+    background-position: -5px top
+}
+
+#box2 .function.enabled.save {
+    background-position: -5px center
+}
+
+#box2 .function.enabled.save:hover {
+    background-position: -5px bottom
+}
+
+#box2 .function.new {
+    background-position: -42px top
+}
+
+#box2 .function.enabled.new {
+    background-position: -42px center
+}
+
+#box2 .function.enabled.new:hover {
+    background-position: -42px bottom
+}
+
+#box2 .function.duplicate {
+    background-position: -79px top
+}
+
+#box2 .function.enabled.duplicate {
+    background-position: -79px center
+}
+
+#box2 .function.enabled.duplicate:hover {
+    background-position: -79px bottom
+}
+
+#box2 .function.raw {
+    background-position: -116px top
+}
+
+#box2 .function.enabled.raw {
+    background-position: -116px center
+}
+
+#box2 .function.enabled.raw:hover {
+    background-position: -116px bottom
+}
+
+#box2 .button-picture {
+    border-width: 0;
+    font-size: inherit
+}
+
+
+        </style>
+        <script src="/static/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="key">
+			<div id="box2">
+                {% if isFile == False %}
+				<button id="saveButton" name="saveButton" class="save function button-picture enabled">Save</button>
+				<a href="/"><button class="new function button-picture enabled">New</button></a>
+                {% else %}
+                <button class="save function button-picture">Save</button>
+				<a href="/"><button class="new function button-picture enabled">New</button></a>
+                {% endif %}
+			</div>
+			<div id="box3" style="display: none">
+				<div class="label"></div>
+				<div class="shortcut"></div>
+			</div>
+		</div>
+
+		<div id="linenos">&gt;</div>
+		<pre id="box" style="display: none" class="hljs" tabindex="-1"><code></code></pre>
+        {% if filelang %}
+		<code style="white-space: pre-wrap;" class="language-{{ filelang }}">{{ code }}</code>
+        {% else %}
+        <textarea id="code" name="code" spellcheck="false"></textarea>
+        {% endif %}
+	
+        <script>
+            // We'll bind to the Save button here
+        $(document).ready(function() { // Ensure DOM is loaded
+            $('#saveButton').click(function() {
+                const code = $('#code').val(); // Use jQuery's .val()
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/',
+                    data: { code: code }, // Data as an object
+                    dataType: 'json', // Expect JSON response
+                    success: function(response) {
+                        if (response.redirect_url) {
+                            window.location.href = response.redirect_url;
+                        }
+                    },
+                    error: function(error) {
+                        // Improved error handling
+                        if (error.responseJSON && error.responseJSON.error) {
+                            console.error("Error: " + error.responseJSON.error);
+                        } else {
+                            console.error("AJAX Error:", error); // Log for debugging
+                        }
+                    }
+                });
+            });
+        });
+        </script>
+    </body>
+</html>
