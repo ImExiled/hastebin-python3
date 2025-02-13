@@ -214,7 +214,7 @@ def getpaste():
     fileRequest = request.values.get("haste")
     if os.path.isfile(f"./files/{fileRequest}.haste"):
         with open(f'./files/{fileRequest}.haste', 'r') as f:
-            return send_file(f"./files/{fileRequest}.haste", as_attachment=True)
+            return send_file(f"./files/{fileRequest}.haste", as_attachment=False)
     else:
         return "{'response': 'haste not found', 'status':'failure'}"
     
@@ -227,7 +227,6 @@ def putpaste():
     logger.warning(hasteToPaste)
     currentUrl = request.url
     rootDomain = get_root_domain(currentUrl)
-    #return hasteToPaste['data']
     with open(f"{filepath}.haste", 'w') as f:
         f.write(hasteToPaste["data"])
         return jsonify({'response': f'{os.path.splitext(filename)[0]}', 'status': 'success'})
