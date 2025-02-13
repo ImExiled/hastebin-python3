@@ -209,14 +209,14 @@ def index():
             return render_template('index.html', code=f.read(), filelang=ourLanguage, isFile=True)
         
 # API endpoints
-@app.route('/api/getpaste', methods=["GET"])
+@app.route('/api/gethaste', methods=["GET"])
 def getpaste():
     fileRequest = request.values.get("haste")
     if os.path.isfile(f"./files/{fileRequest}.haste"):
         with open(f'./files/{fileRequest}.haste', 'r') as f:
             return send_file(f"./files/{fileRequest}.haste", as_attachment=True)
     else:
-        return "404"
+        return "{'response': 'haste not found', 'status':'failure'}"
     
 @app.route('/api/haste', methods=["POST"])
 def putpaste():
@@ -228,6 +228,6 @@ def putpaste():
     currentUrl = request.url
     rootDomain = get_root_domain(currentUrl)
     #return hasteToPaste['data']
-    with open(filepath, 'w') as f:
+    with open(f"{filepath}.haste", 'w') as f:
         f.write(hasteToPaste["data"])
         return jsonify({'response': f'{os.path.splitext(filename)[0]}', 'status': 'success'})
