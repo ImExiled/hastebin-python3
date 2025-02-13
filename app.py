@@ -1,7 +1,7 @@
 from colorama import Fore, Back, Style
 import logging
 import datetime as date
-from flask import Flask, jsonify, url_for, render_template, send_from_directory, request, redirect
+from flask import Flask, jsonify, send_file, url_for, render_template, send_from_directory, request, redirect
 from os import path
 import pathlib
 import random
@@ -145,6 +145,7 @@ def detect_language(filename):
 
 # Let's create the webserver
 app = Flask(__name__, static_url_path='/static')
+
 @app.route('/', methods=["POST"])
 def save_code():
     code = request.form.get('code')
@@ -188,3 +189,13 @@ def index():
             return render_template('index.html', isFile=False)
         with open(f'./files/{ourFileName}.haste', 'r') as f:
             return render_template('index.html', code=f.read(), filelang=ourLanguage, isFile=True)
+        
+# API endpoints
+@app.route('/api/getpaste', methods=["GET"])
+def getpaste():
+    fileRequest = request.values.get("haste")
+    if os.path.isfile(f"./files/{fileRequest}.haste"):
+        with open(f'./files/{fileRequest}.haste', 'r') as f:
+            return send_file(f"./files/{fileRequest}.haste", as_attachment=True)
+    else:
+        return "404"
