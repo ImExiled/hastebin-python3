@@ -1,3 +1,4 @@
+from urllib.parse import urlparse
 from colorama import Fore, Back, Style
 import logging
 import datetime as date
@@ -7,6 +8,8 @@ import pathlib
 import random
 import string
 import os
+from publicsuffix import PublicSuffixList # type: ignore
+
 
 # Create a simple logger with colors so we can accurately log errors and such
 class CustomFormatter(logging.Formatter):
@@ -142,6 +145,21 @@ def detect_language(filename):
 
     return lang_map.get(ext)  # Use .get() to return None if not found
 
+psl = PublicSuffixList()  # Initialize the Public Suffix List
+
+def get_root_domain(url):
+    """
+    Extracts the root domain from a URL using the Public Suffix List.
+    """
+    try:
+        parsed_url = urlparse(url)
+        hostname = parsed_url.hostname
+        if hostname:
+          return psl.get_tld(hostname)
+        return None  # Handle cases where hostname is None
+    except Exception as e:
+        print(f"Error parsing URL: {e}") #Important for debugging
+        return None
 
 # Let's create the webserver
 app = Flask(__name__, static_url_path='/static')
@@ -199,3 +217,17 @@ def getpaste():
             return send_file(f"./files/{fileRequest}.haste", as_attachment=True)
     else:
         return "404"
+    
+@app.route('/api/haste', methods=["POST"])
+def putpaste():
+    filename = ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+    hasteToPaste = request.json
+    filepath = os.path.join("files", filename)
+    os.makedirs("files", exist_ok=True)
+    logger.warning(hasteToPaste)
+    currentUrl = request.url
+    rootDomain = get_root_domain(currentUrl)
+    #return hasteToPaste['data']
+    with open(filepath, 'w') as f:
+        f.write(hasteToPaste["data"])
+        return jsonify({'response': f'{os.path.splitext(filename)[0]}', 'status': 'success'})
