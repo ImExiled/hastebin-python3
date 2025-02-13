@@ -213,7 +213,7 @@ def index():
 def getpaste():
     fileRequest = request.values.get("haste")
     filepath = os.path.join("files", f"{fileRequest}.haste") # Construct path correctly
-    return "not implemented"
+    return jsonify({'response': 'resource disabled', 'status':'failure'}), 404 
     if os.path.exists(filepath): # Use os.path.exists
         try:
             with open(filepath, 'rb') as f:  # **Consistent: Always binary mode**
