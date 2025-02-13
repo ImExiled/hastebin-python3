@@ -1,8 +1,9 @@
+import io
 from urllib.parse import urlparse
 from colorama import Fore, Back, Style
 import logging
 import datetime as date
-from flask import Flask, jsonify, send_file, render_template, request, make_response
+from flask import Flask, jsonify, send_file, render_template, request, make_response, send_from_directory
 from os import path
 import pathlib
 import random
@@ -209,29 +210,21 @@ def index():
             return render_template('index.html', code=f.read(), filelang=ourLanguage, isFile=True)
         
 # API endpoints
-@app.route('/api/gethaste', methods=["GET"])
-def getpaste():
-    fileRequest = request.values.get("haste")
-    filepath = os.path.join("files", f"{fileRequest}.haste") # Construct path correctly
-    return jsonify({'response': 'resource disabled', 'status':'failure'}), 404 
-    if os.path.exists(filepath): # Use os.path.exists
-        try:
-            with open(filepath, 'rb') as f:  # **Consistent: Always binary mode**
-                file_content_bytes = f.read()
-                file_content_string = file_content_bytes.decode('utf-8', errors='replace')
-                file_content_bytes = file_content_string.encode('utf-8')
-
-
-            response = make_response(file_content_bytes)
-            response.headers['Content-Type'] = 'text/plain; charset=utf-8'
-            return response
-
-        except Exception as e:
-            logger.error(f"Error reading or serving file: {e}")
-            return "Error serving file", 500  # More informative error
-
-    else:
-        return jsonify({'response': 'haste not found', 'status':'failure'}), 404 
+@app.route('/api/download_haste/<path:haste_path>')
+def gethaste(haste_path):
+    parsed_url = urlparse(request.base_url)
+    path_parts = haste_path.split('/')
+    last_part = path_parts[-1] if path_parts else ""
+    filename = last_part + ".haste"
+    filepath = f"./files/{filename}"
+    with open(filepath, 'rb') as f:
+        file_content = io.BytesIO(f.read())
+    return send_file(
+        file_content,
+        mimetype="application/octet-stream",
+        as_attachment=True,
+        download_name = os.path.basename(filepath)
+    )
     
 @app.route('/api/haste', methods=["POST"])
 def putpaste():
