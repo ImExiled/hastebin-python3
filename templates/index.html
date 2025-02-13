@@ -841,8 +841,20 @@ textarea {
         {% endif %}
 	
         <script>
+            
             // We'll bind to the Save button here
         $(document).ready(function() { // Ensure DOM is loaded
+
+            // Capture CTRL + S and bind it to our save button.
+            document.addEventListener('keydown', e => {
+                if (e.ctrlKey && e.key === 's') {
+                    // Prevent the Save dialog to open
+                    e.preventDefault();
+                    // Place your code here
+                    $('#saveButton').trigger('click');
+                }
+                });
+
             $('#saveButton').click(function() {
                 const code = $('#code').val(); // Use jQuery's .val()
 
