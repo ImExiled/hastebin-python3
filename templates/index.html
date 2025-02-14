@@ -821,9 +821,11 @@ textarea {
                 {% if isFile == False %}
 				<button id="saveButton" name="saveButton" class="save function button-picture enabled">Save</button>
 				<a href="/"><button class="new function button-picture enabled">New</button></a>
+                <button id="downloadHaste" name="downloadHaste" class="duplicate function button-picture">Download Haste</button>
                 {% else %}
                 <button class="save function button-picture">Save</button>
 				<a href="/"><button class="new function button-picture enabled">New</button></a>
+                <button onclick="downloadHaste()" class="duplicate function button-picture enabled">Download Haste</button>
                 {% endif %}
 			</div>
 			<div id="box3" style="display: none">
@@ -841,7 +843,28 @@ textarea {
         {% endif %}
 	
         <script>
-            
+            function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                sURLVariables = sPageURL.split('&'),
+                sParameterName,
+                i;
+
+            for (i = 0; i < sURLVariables.length; i++) {
+                sParameterName = sURLVariables[i].split('=');
+
+                if (sParameterName[0] === sParam) {
+                    return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                }
+            }
+            return false;
+        }
+            function downloadHaste() {
+                const url = window.location.href;
+                console.log(url);
+                const ourFileName = getUrlParameter('f');
+                //window.location = "/api/download_haste/" + ourFileName
+                window.location = "/api/download_haste/" + ourFileName;
+            }
             // We'll bind to the Save button here
         $(document).ready(function() { // Ensure DOM is loaded
 
@@ -854,6 +877,8 @@ textarea {
                     $('#saveButton').trigger('click');
                 }
                 });
+
+
 
             $('#saveButton').click(function() {
                 const code = $('#code').val(); // Use jQuery's .val()

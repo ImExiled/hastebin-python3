@@ -148,6 +148,43 @@ def detect_language(filename):
 
 psl = PublicSuffixList()  # Initialize the Public Suffix List
 
+def remove_middle_extension(file_name):
+    """Removes the middle extension(s) from a filename, if present.
+
+    Args:
+        file_name: The filename string.
+
+    Returns:
+        The filename with the middle extension(s) removed, or the original 
+        filename if there's only one or no extension or if the middle
+        extension is "md".
+    """
+    parts = file_name.split(".")  # Split into all parts
+    if len(parts) > 2 and parts[-2]:  # Check for at least 3 parts and if the middle part is not "md"
+        new_parts = parts[:-2] + parts[-1:]  # Keep name and last, exclude others
+        return ".".join(new_parts)
+    else:
+        return file_name
+
+def get_middle_extension(file_name):
+    """Removes the middle extension(s) from a filename, if present.
+
+    Args:
+        file_name: The filename string.
+
+    Returns:
+        The filename with the middle extension(s) removed, or the original 
+        filename if there's only one or no extension or if the middle
+        extension is "md".
+    """
+    parts = file_name.split(".")  # Split into all parts
+    if len(parts) > 2 and parts[-2]:  # Check for at least 3 parts
+        new_parts = parts[:-2] + parts[-1:]  # Keep name and last, exclude others
+        return "." + ".".join(parts[1:-1])
+    else:
+        return file_name
+
+
 def get_root_domain(url):
     """
     Extracts the root domain from a URL using the Public Suffix List.
@@ -216,14 +253,20 @@ def gethaste(haste_path):
     path_parts = haste_path.split('/')
     last_part = path_parts[-1] if path_parts else ""
     filename = last_part + ".haste"
-    filepath = f"./files/{filename}"
+    # We need to remove the middle extension.
+    our_middle_extension = get_middle_extension(filename)
+    filename_without_extension = remove_middle_extension(filename)
+    # Then we need to send the file with the correct extension, so we'll define it here.
+    #logger.critical(filename_without_extension)
+    filename.rsplit('.', 1)[0] + ""
+    filepath = f"./files/{filename_without_extension}"
     with open(filepath, 'rb') as f:
         file_content = io.BytesIO(f.read())
     return send_file(
         file_content,
         mimetype="application/octet-stream",
         as_attachment=True,
-        download_name = os.path.basename(filepath)
+        download_name = f"{last_part}"
     )
     
 @app.route('/api/haste', methods=["POST"])
