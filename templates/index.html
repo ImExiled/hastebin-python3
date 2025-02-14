@@ -941,6 +941,20 @@ function applyLanguageAndHighlight() {
             // We'll bind to the Save button here
         $(document).ready(function() { // Ensure DOM is loaded
 
+            $('#code').keydown(function(e) {
+        if (e.key === 'Tab') { // Or e.keyCode === 9 for older browsers
+            e.preventDefault(); // Prevent default tab behavior
+
+            const startPos = this.selectionStart;
+            const endPos = this.selectionEnd;
+
+            // Insert tab character (4 spaces in this example)
+            this.value = this.value.substring(0, startPos) + "    " + this.value.substring(endPos);
+
+            // Move cursor position
+            this.selectionStart = this.selectionEnd = startPos + 4; // Adjust 4 if you change the number of spaces.
+        }
+    });
             // Capture CTRL + S and bind it to our save button.
             document.addEventListener('keydown', e => {
                 if (e.ctrlKey && e.key === 's') {
