@@ -820,7 +820,7 @@ a .url-link a:active .url a:visited a:link {
         </style>
         <script src="/static/jquery.min.js"></script>
     </head>
-    <body>
+    <body class="line-numbers">
         <div id="key">
 			<div id="box2">
                 {% if isFile == False %}
@@ -842,12 +842,80 @@ a .url-link a:active .url a:visited a:link {
 		<div id="linenos">&gt;</div>
 		<pre id="box" style="display: none" class="hljs" tabindex="-1"><code></code></pre>
         {% if filelang %}
-		<code style="white-space: pre-wrap;" class="language-{{ filelang }}">{{ code }}</code>
+		<code style="white-space: pre-wrap;" class="language-{{ filelang }} line-numbers">{{ code }}</code>
         {% else %}
-        <textarea id="code" name="code" spellcheck="false"></textarea>
+        <textarea id="code" class="line-numbers" name="code" spellcheck="false"></textarea>
         {% endif %}
 	
         <script>
+function extractKeyValuePairs(textareaId) {
+    const textarea = document.getElementById(textareaId);
+  if (!textarea) return {};
+
+  const keyValuePairs = {};
+  const lines = textarea.value.split('\n');
+
+  for (const line of lines) {
+    // Improved regex to handle different comment styles:
+    const match = line.match(/^\s*(?:#|\/\/|\/\*|\*)\s*\[([^:]+):([^\]]+)\]/);
+    if (match) {
+      const key = match[1].trim();
+      const value = match[2].trim();
+      keyValuePairs[key] = value;
+    }
+  }
+
+  return keyValuePairs;
+}
+function getKeyValue(keyToFind) {
+  const extractedData = extractKeyValuePairs("code");
+  return extractedData[keyToFind];
+}
+function highlightCode() {
+  const language = getKeyValue("haste-language");
+
+  if (!language) {
+    console.warn("No 'haste-language' found. Cannot highlight code.");
+    return;
+  }
+
+  const $code = $("#code");
+  const originalContent = $code.val(); // Store the original content
+
+  const codeStart = originalContent.indexOf("```") + 3;
+  const codeEnd = originalContent.lastIndexOf("```");
+
+  if(codeStart === -1 || codeEnd === -1) {
+    console.warn("No code block found.");
+    return;
+  }
+}
+
+function applyLanguageAndHighlight() {
+  const language = getKeyValue("haste-language");
+  const $code = $("#" + "code"); // Get the element using jQuery
+
+  if (!language) {
+    console.warn("No 'haste-language' found. Cannot highlight code.");
+    return;
+  }
+
+  // 1. Remove all existing classes (jQuery):
+  $code.removeClass(); // Removes all classes
+
+  // 2. Add the new language class (jQuery):
+  $code.addClass(`language-${language}`);
+
+  // 3. Tell Prism to re-highlight:
+  Prism.highlightElement("textarea"); // $code[0] gets the DOM element from the jQuery object
+}
+            $('#code').on('input', function() {
+                if( getKeyValue("haste-language") ) {
+                    applyLanguageAndHighlight();
+
+                }
+            });
+
             function getUrlParameter(sParam) {
                 var sPageURL = window.location.search.substring(1),
                 sURLVariables = sPageURL.split('&'),
@@ -887,15 +955,17 @@ a .url-link a:active .url a:visited a:link {
 
             $('#saveButton').click(function() {
                 const code = $('#code').val(); // Use jQuery's .val()
-
+                var KeyValue = getKeyValue("haste-file-extension");
                 $.ajax({
+                    
                     type: 'POST',
                     url: '/',
                     data: { code: code }, // Data as an object
                     dataType: 'json', // Expect JSON response
                     success: function(response) {
                         if (response.redirect_url) {
-                            window.location.href = response.redirect_url;
+                            
+                            window.location.href = response.redirect_url + "." + KeyValue;
                         }
                     },
                     error: function(error) {
